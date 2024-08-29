@@ -18,6 +18,7 @@ public class Palito extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	protected DesenhoPanel desenho;
 
 	/**
 	 * Launch the application.
@@ -51,10 +52,13 @@ public class Palito extends JFrame {
 		contentPane.setLayout(new BorderLayout());
 		setContentPane(contentPane);
 		
-		JLabel balaoFala = new JLabel("Olá, meu nome é Lucas Grulho!");
-		balaoFala.setPreferredSize(new Dimension(50,80));
-		balaoFala.setFont(new Font("Arial",Font.PLAIN, 18));
-		contentPane.add(balaoFala, BorderLayout.NORTH);
+		JPanel panelNorte = new JPanel();
+        panelNorte.setPreferredSize(new Dimension(650, 80));
+        panelNorte.setLayout(null);
+        JLabel balaoFala = new JLabel("Olá, meu nome é Lucas Grulho!");
+        balaoFala.setFont(new Font("Arial", Font.PLAIN, 18));
+        panelNorte.add(balaoFala);
+        contentPane.add(panelNorte, BorderLayout.NORTH);
 		
 		// Config Painel Sul + Botão de avançar
 		JPanel panelSul = new JPanel();
@@ -62,9 +66,13 @@ public class Palito extends JFrame {
 		panelSul.setPreferredSize(new Dimension(650, 60));
 		
 		JButton skip = new JButton("AVANÇAR");
-		skip.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+		skip.addActionListener(e -> {
+			try {
+				limparTela();
+				Thread.sleep(1000);
+				redesenharTela();
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
 			}
 		});
 		skip.setFont(new Font("Arial",Font.BOLD, 12));
@@ -73,26 +81,44 @@ public class Palito extends JFrame {
 		
 		panelSul.add(skip);
 		contentPane.add(panelSul,BorderLayout.SOUTH);
+		
+		//Classe desenho
+		desenho = new DesenhoPanel();
+		contentPane.add(desenho, BorderLayout.CENTER);
 	}
 	
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		
-		g.drawOval(287, 50, 75, 75); //Cabeça
-		
-		g.drawOval(305, 70, 10, 10);// Olho 1
-		g.drawOval(335, 70, 10, 10);// Olho 2
-		
-		//g.drawArc(310, 90, 30, 20, 0, -180);// Boca FECHADA
-		g.drawOval(310, 100, 30, 10);// Boca ABERTA
-		
-		g.drawLine(325, 125, 325, 375); //Corpo
-		
-		g.drawLine(325, 180, 255, 220); //Braço 1
-		g.drawLine(325, 180, 395, 220); //Braço 2
-		
-		g.drawLine(325, 375, 275, 462); //Perna 1
-		g.drawLine(325, 375, 375, 462); //Perna 2
+	public void limparTela() {
+		contentPane.removeAll();
+		contentPane.revalidate();
+		contentPane.repaint();
+	}
+	public void redesenharTela() {
+		desenho = new DesenhoPanel();
+		contentPane.add(desenho, BorderLayout.CENTER);
+		contentPane.revalidate();
+		contentPane.repaint();
+	}
+	class DesenhoPanel extends JPanel{
+		@Override
+		public Dimension getPreferredSize() {
+			return new Dimension(650,500);
+		}
+		@Override
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			
+			int centroX = getWidth() / 2;
+            int centroY = getHeight() / 2;
+
+            g.drawOval(centroX - 37, centroY - 225, 75, 75); // Cabeça
+            g.drawOval(centroX - 20, centroY - 205, 10, 10); // Olho 1
+            g.drawOval(centroX + 10, centroY - 205, 10, 10); // Olho 2
+            g.drawOval(centroX - 15, centroY - 175, 30, 10); // Boca ABERTA
+            g.drawLine(centroX, centroY - 150, centroX, centroY + 100); // Corpo
+            g.drawLine(centroX, centroY - 95, centroX - 70, centroY - 55); // Braço 1
+            g.drawLine(centroX, centroY - 95, centroX + 70, centroY - 55); // Braço 2
+            g.drawLine(centroX, centroY + 100, centroX - 50, centroY + 187); // Perna 1
+            g.drawLine(centroX, centroY + 100, centroX + 50, centroY + 187); // Perna 2
+        }
 	}
 }
