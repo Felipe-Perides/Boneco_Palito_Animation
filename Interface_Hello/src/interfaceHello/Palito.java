@@ -3,8 +3,10 @@ package interfaceHello;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagLayout;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -45,48 +47,40 @@ public class Palito extends JFrame {
 	}
 	
 	public void initComponents() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 650, 500);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout());
-		setContentPane(contentPane);
-		
-		JPanel panelNorte = new JPanel();
-        panelNorte.setPreferredSize(new Dimension(650, 80));
-        panelNorte.setLayout(null);
-        JLabel balaoFala = new JLabel("Olá, meu nome é Lucas Grulho!");
-        balaoFala.setFont(new Font("Arial", Font.PLAIN, 18));
-        panelNorte.add(balaoFala);
-        contentPane.add(panelNorte, BorderLayout.NORTH);
-		
-		// Config Painel Sul + Botão de avançar
-		JPanel panelSul = new JPanel();
-		panelSul.setLayout(null);
-		panelSul.setPreferredSize(new Dimension(650, 60));
-		
-		JButton skip = new JButton("AVANÇAR");
-		skip.addActionListener(e -> {
-			try {
-				limparTela();
-				Thread.sleep(1000);
-				redesenharTela();
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-		});
-		skip.setFont(new Font("Arial",Font.BOLD, 12));
-		skip.setSize(115,39);
-		skip.setLocation(508, 11);
-		
-		panelSul.add(skip);
-		contentPane.add(panelSul,BorderLayout.SOUTH);
-		
-		//Classe desenho
-		desenho = new DesenhoPanel();
-		contentPane.add(desenho, BorderLayout.CENTER);
+	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    setBounds(100, 100, 650, 500);
+	    contentPane = new JPanel();
+	    contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+	    contentPane.setLayout(new BorderLayout());
+	    setContentPane(contentPane);
+	    
+	    // Painel superior com o label
+	    JPanel topPanel = new JPanel();
+	    topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+	    JLabel balaoFala = new JLabel("Olá, meu nome é Lucas Grulho!");
+	    balaoFala.setFont(new Font("Arial", Font.PLAIN, 18));
+	    topPanel.add(balaoFala);
+	    contentPane.add(topPanel, BorderLayout.NORTH);
+	    
+	    // Painel inferior com o botão
+	    JPanel bottomPanel = new JPanel();
+	    bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+	    JButton skip = new JButton("AVANÇAR");
+	    skip.addActionListener(e -> {
+	        limparTela();
+	        redesenharTela();
+	    });
+	    skip.setFont(new Font("Arial", Font.BOLD, 12));
+	    bottomPanel.add(skip);
+	    contentPane.add(bottomPanel, BorderLayout.SOUTH);
+	    
+	    // Classe desenho
+	    desenho = new DesenhoPanel();
+	    desenho.setPreferredSize(new Dimension(650, 350)); // Define o tamanho preferido do painel de desenho
+	    contentPane.add(desenho, BorderLayout.CENTER);
 	}
-	
+
+
 	public void limparTela() {
 		contentPane.removeAll();
 		contentPane.revalidate();
@@ -94,14 +88,14 @@ public class Palito extends JFrame {
 	}
 	public void redesenharTela() {
 		desenho = new DesenhoPanel();
-		contentPane.add(desenho, BorderLayout.CENTER);
+		contentPane.add(desenho);
 		contentPane.revalidate();
 		contentPane.repaint();
 	}
 	class DesenhoPanel extends JPanel{
 		@Override
 		public Dimension getPreferredSize() {
-			return new Dimension(650,500);
+			return new Dimension(650,350);
 		}
 		@Override
 		public void paintComponent(Graphics g) {
